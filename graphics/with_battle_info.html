@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>with_battle_info</title>
+  <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+  <link rel="stylesheet" href="font/font.css" type="text/css" charset="utf-8" />
+  <script src="js/anime.min.js"></script>
+  <style>
+    body {
+      width: 1920;
+      height: 1080;
+      font-family: "splatfont_2";
+    }
+    .stage{
+      position: relative;
+      top: -5px;
+    }
+    .stage img {
+      width: 220px;  /* 横幅を200pxに */
+      border-radius: 25px; /* ちょっとだけ角丸 */
+      position: absolute;
+      top: 32px;
+      /* left: 1680px; */
+    }
+    .stage p {
+      position: absolute;
+      margin-top: 0px;
+      top: 0;
+      left: 0;
+    }
+    .stage label {
+      position: absolute;
+      margin-bottom: -90px;
+      bottom: 0;
+      left: 0;
+    }
+    .rule img {
+      width: 80px;  /* 横幅を200pxに */
+      border-radius: 20px; /* ちょっとだけ角丸 */
+      position: absolute;
+      top: 90px;
+      /* left: 1820px; */
+      left: 140px;
+    }
+    .result img {
+      width: 60px;  
+      position: absolute;
+      top: 75px;
+      left: 5px;
+    }
+    .big_radius img {
+      margin-top: 200px;
+      width: 800px;  /* 横幅を200pxに */
+      border-radius: 140px; /* ちょっとだけ角丸 */
+    }
+    .logo_large img{
+      width: 280px;
+      position: absolute;
+      right: 0px;
+      bottom: 30px;
+      margin-right: -15px;
+    }
+    .container {
+      margin: 0px;
+      padding: 0px;
+      justify-content: center;
+      font-family: "splatfont_2";
+    }
+
+    .img_box {
+      width: 240px;
+      height: 150px;
+      font-family: "splatfont_2";
+      position: absolute;
+      left: 1680px;
+      /* margin-top: -30px; */
+    }
+
+    #background {
+      margin: 0px;
+      padding: 0px;
+      display: flex;
+      height: 1080px;
+      justify-content: center;
+      width: 1920px;
+      background-image: url('img/with_battle_info.png');
+      font-family: "splatfont_2";
+      position: absolute;
+    }
+
+    .namebar {
+      width: 1920px;
+      height: 1080px;
+      margin-top: 0px;
+      font-family: "splatfont_2";
+      font-size: 22px;
+      font-weight: bolder;
+      color: #fff;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      position: absolute;
+    }
+
+    #time {
+      width: 1920px;
+      height: 1080px;
+      text-align: center;
+      margin-top: -10px;
+      margin-left: -260px;
+      font-size: 60px;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      color: #fff;
+      font-family: 'splatfont_2';
+      position: absolute;
+      top: 0px;
+    }
+
+    #score_one {
+      width: 100px;
+      height: 100px;
+      margin-top: -55px;
+      color: #fff;
+      font-size: 100px;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      text-align: center;
+      font-family: 'splatfont';
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+
+    #score_two {
+      width: 100px;
+      height: 100px;
+      margin-top: -55px;
+      color: #fff;
+      font-size: 100px;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      text-align: center;
+      font-family: 'splatfont';
+      position: absolute;
+      right: 255px;
+      top: 0px;
+    }
+
+    .text_small{
+      font-size: 35px;
+      color: #fff;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      font-family: 'splatfont_2';
+    }
+
+    .stage_name{
+      font-size: 25px;
+      color: #fff;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      font-family: 'splatfont_2';
+    }
+
+    /* #stage_name {
+      text-align: right;
+      padding-right: 0px;
+      height: 80px;
+      display: flex;
+      font-size: 35px;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      align-items: left;
+      justify-content: center;
+      font-family: "splatfont_2";
+    } */
+
+    #player_one {
+      /* margin-left: 140px; */
+      height: 80px;
+      display: flex;
+      font-size: 60px;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      align-items: center;
+      justify-content: center;
+      font-family: "splatfont_2";
+      position: absolute;
+      left: 120px;
+      top: 10px;
+    }
+    #player_two {
+      margin-left: 140px;
+      height: 80px;
+      display: flex;
+      font-size: 60px;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      align-items: center;
+      justify-content: center;
+      font-family: "splatfont_2";
+      position: absolute;
+      right: 380px;
+      top: 10px;
+    }
+  </style>
+
+</head>
+
+<body class="container">
+  <link rel="stylesheet" href="stylesheet.css" type="text/css" charset="utf-8" />
+  <div id="background">
+    <div id="time"></div>
+    <div id="score_one"></div>
+    <div id="score_two"></div>
+    <div id="logo" class="logo_large">
+      <img src="img/logo/munokiwacup_logo_large.png">
+    </div>
+  </div>
+  <div id="battle_list">
+    <!-- <br><br><br><br><br><br>
+    <p id="temp">temp</p> -->
+    <!-- <div id="box1" class="img_box">
+      <div id="stage1" class="stage">
+        <img src="img/stage/アジフライスタジアム.jpg">
+        <p id="label1" class="text_small">第1試合</p>
+      </div>
+      <div id="rule1" class="rule">
+        <img src="img/rule/ガチエリア.png">
+      </div>
+    </div>
+    <div id="box2" class="img_box">
+      <label id="label2" class="text_small">第2試合</label>
+      <div id="stage2" class="stage">
+        <img src="img/stage/アンチョビットゲームズ.jpg">
+      </div>
+      <div id="rule2" class="rule">
+        <img src="img/rule/ガチホコバトル.png">
+      </div>
+    </div> -->
+  </div>
+  <div class="namebar">
+    <div id="player_one"></div>
+  </div>
+  <div class="namebar">
+    <div id="player_two"></div>
+  </div>
+  <!-- <div id="scoreboard">
+    <div id="score_one"></div>
+    <div class="namebar">
+      <div id="player_one"></div>
+    </div>
+    <div id="time"></div>
+    <div class="namebar">
+      <div id="player_two"></div>
+    </div>
+    <div id="score_two"></div>
+    <div>
+    </div>
+  </div> -->
+</body>
+
+<script>
+
+  const time = document.getElementById("time");
+  const titleView = nodecg.Replicant("title");
+  titleView.on("change", newValue => {
+    time.innerText = newValue;
+  });
+
+  const player_one = document.getElementById("player_one");
+  const p1nameView = nodecg.Replicant("p1name");
+  p1nameView.on("change", newValue => {
+    player_one.innerText = newValue;
+  });
+
+  const player_two = document.getElementById("player_two");
+  const p2nameView = nodecg.Replicant("p2name");
+  p2nameView.on("change", newValue => {
+    player_two.innerText = newValue;
+  });
+
+  const score_one = document.getElementById('score_one')
+  const count1View = nodecg.Replicant('count1', { defaultValue: 0 })
+  count1View.on('change', newValue => {
+    score_one.innerText = newValue
+  })
+
+  const score_two = document.getElementById('score_two')
+  const count2View = nodecg.Replicant('count2', { defaultValue: 0 })
+  count2View.on('change', newValue => {
+    score_two.innerText = newValue
+  })
+  
+  const background = document.getElementById('background')
+  const blindnessRep = nodecg.Replicant('blindness', { defaultValue: 0 })
+
+  // var battleStageRep = nodecg.Replicant("battleStage", {defaultValue: ""});
+  // var battleRuleRep = nodecg.Replicant("battleRule", {defaultValue: ""});
+  var ruleStageRep = nodecg.Replicant("ruleStage", {defaultValue: ""});
+  var resultRep = nodecg.Replicant("result", {defaultValue: ""});
+  
+
+  NodeCG.waitForReplicants(ruleStageRep, resultRep, blindnessRep).then(() => {
+    var rule_stage_lis = ruleStageRep.value.split(/\n/);
+    var result_lis = resultRep.value.split(/\n/);
+    for (var i = 0; i < rule_stage_lis.length; i++) {
+      if (rule_stage_lis[i] != ''){
+        stage = rule_stage_lis[i].split(',')[0];
+        rule = rule_stage_lis[i].split(',')[1];
+        addBattleInfo(stage, rule, result_lis[i], i+1);
+      }
+    }
+  });
+
+  blindnessRep.on('change', newValue => {
+    changeColor(newValue);
+  })
+  ruleStageRep.on('change', (newValue, oldValue) => {
+    // var temp = document.getElementById("temp");
+    // temp.innerText = newValue
+    deleteBattleInfo();
+    // deleteBattleInfo();
+    var rule_stage_lis = newValue.split(/\n/);
+    var result_lis = resultRep.value.split(/\n/);
+    
+    // temp.innerText = temp.innerText + rule_stage_lis
+    // temp.innerText = temp.innerText + result_lis
+    for (var i = 0; i < rule_stage_lis.length; i++) {
+      if (rule_stage_lis[i] != ''){
+        stage = rule_stage_lis[i].split(',')[0];
+        rule = rule_stage_lis[i].split(',')[1];
+        addBattleInfo(stage, rule, result_lis[i], i+1);
+      }
+    }
+  });
+  // battleRuleRep.on('change', (newValue, oldValue) => {});
+
+  resultRep.on('change', (newValue, oldValue) => {
+    changeColor(blindnessRep.value);
+  });
+
+  // NodeCG.waitForReplicants(blindnessRep).then(() => {
+  //   nodecg.readReplicant('blindness', value => {
+  //     if (value){
+  //       background.style.backgroundImage = "url('img/with_battle_info_blindness.png')";
+  //     }
+  //     else{
+  //       background.style.backgroundImage = "url('img/with_battle_info.png')";
+  //     }
+  //   });
+  // });
+  
+
+  function changeColor(checked){
+    var resultValue = resultRep.value;
+    // var tempElement = document.getElementById('temp');
+    // tempElement.textContent = "temp ->" + temp;
+    if (resultValue){
+      if(checked){
+        var result_lis = resultValue.split(/\n/);
+        var result = document.getElementsByClassName('result');
+        for (var i = 0; i < result.length; i++) {
+          var child = result[i].firstChild
+          if (result_lis[i] == 1){
+            child.src = 'img/ika_lamp/ika_yellow.png';
+          }
+          else if (result_lis[i] == 2){
+            child.src = 'img/ika_lamp/ika_blue.png';
+          }
+          else{
+            child.src = 'img/ika_lamp/ika_dummy.png';
+          }
+        }
+      }
+      else{
+        var result_lis = resultValue.split(/\n/);
+        var result = document.getElementsByClassName('result');
+        for (var i = 0; i < result.length; i++) {
+          var child = result[i].firstChild
+          if (result_lis[i] == 1){
+            child.src = 'img/ika_lamp/ika_pink.png';
+          }
+          else if (result_lis[i] == 2){
+            child.src = 'img/ika_lamp/ika_green.png';
+          }
+          else{
+            child.src = 'img/ika_lamp/ika_dummy.png';
+          }
+        }
+      }
+
+    }
+    
+    if(checked){
+      background.style.backgroundImage = "url('img/with_battle_info_blindness.png')";
+    }
+    else{
+      background.style.backgroundImage = "url('img/with_battle_info.png')";
+    }
+  }
+
+  function deleteBattleInfo(){
+    var boxes = document.getElementsByClassName('img_box');
+    // temp.innerText = temp.innerText + boxes.length + '\n'
+    while(boxes.length){
+      for (var i = 0; i < boxes.length; i++) {
+        boxes[i].remove();
+      }
+      boxes = document.getElementsByClassName('img_box');
+    }
+    // var boxes2 = document.getElementsByClassName('img_box');
+    // temp.innerText = temp.innerText + boxes2.length + '\n'
+  }
+  
+  function addBattleInfo(selectedStage, selectedRule, resultID, index){
+    // temp.innerText = temp.innerText + selectedStage + selectedRule + resultID + index + '\n';
+    var parentNode = document.getElementById("battle_list");
+    var newNode = document.createElement("div");
+    newNode.setAttribute('class', 'img_box');
+    newNode.setAttribute('id', 'box' + index);
+    newNode.style.top = 150 * (index - 1) + 'px';
+
+    var label = document.createElement('p');
+    label.setAttribute('class', 'text_small');
+    label.setAttribute('id', 'label' + index);
+    label.appendChild(document.createTextNode('第' + index + '試合'));
+
+    var stage_name = document.createElement('label');
+    stage_name.setAttribute('class', 'stage_name');
+    stage_name.setAttribute('id', 'stage_name' + index);
+    stage_name.appendChild(document.createTextNode( selectedStage ));
+        
+    var stage = document.createElement('div');
+    stage.setAttribute('id', 'stage' + index);
+    stage.setAttribute('class', 'stage');
+
+    var stage_img = document.createElement('img');
+    stage_img.setAttribute('src', 'img/stage/' + selectedStage + '.jpg');
+    stage.appendChild(stage_img);
+    stage.appendChild(label);
+    stage.appendChild(stage_name);
+    
+    var rule = document.createElement('div');
+    rule.setAttribute('id', 'rule' + index);
+    rule.setAttribute('class', 'rule');
+
+    var rule_img = document.createElement('img');
+    rule_img.setAttribute('src', 'img/rule/' + selectedRule + '.png');
+    rule.appendChild(rule_img);
+    
+    var result = document.createElement('div');
+    result.setAttribute('id', 'result' + index);
+    result.setAttribute('class', 'result');
+
+    var result_img = document.createElement('img');
+    if (resultID==1){
+      if(blindnessRep.value){
+        result_img.setAttribute('src', 'img/ika_lamp/ika_yellow.png');
+      }
+      else{
+        result_img.setAttribute('src', 'img/ika_lamp/ika_pink.png');
+      }
+    }
+    else if (resultID==2){
+      if(blindnessRep.value){
+        result_img.setAttribute('src', 'img/ika_lamp/ika_blue.png');
+      }
+      else{
+        result_img.setAttribute('src', 'img/ika_lamp/ika_green.png');
+      }
+    }
+    else{
+      result_img.setAttribute('src', 'img/ika_lamp/ika_dummy.png');
+    }
+    result.appendChild(result_img);
+
+    newNode.appendChild(stage);
+    newNode.appendChild(rule);
+    newNode.appendChild(result);
+    parentNode.appendChild(newNode);
+
+  }
+
+</script>
+
+</html>

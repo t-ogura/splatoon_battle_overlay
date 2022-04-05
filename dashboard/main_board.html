@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+  <style>
+    * {
+        font-size: 20px;
+  }
+    .team{
+        width: 400px;
+    }
+    .member {
+        width: 250px;
+    }
+    .content {
+        margin-bottom: 10px
+    }
+    .countview {
+        width: 30px;
+    }
+  </style>
+</head>
+<body>
+    <div id="folder">
+        <div class="content">
+            <label>タイトル</label>
+            <input id="titleform" class="team" type="text">
+        </div>
+
+    <div class="content">
+            <label>アルファ</label>
+            <input id="player1" class="member" type="text" placeholder="アルファチーム">
+
+            <input id="p1count" type="text" class="countview" readonly>
+            <button id="p1inc">+1</button>
+            <button id="p1dec">-1</button>
+
+    </div>
+    <div class="content">
+            <label>ブラボー</label>
+            <input id="player2" class="member" type="text" placeholder="ブラボーチーム">
+            <input id="p2count" type="text" class="countview" readonly>
+            <button id="p2inc">+1</button>
+            <button id="p2dec">-1</button>
+    </div>
+  </div>
+    <div id="folder">
+    <div class="content">
+    
+    <button id="submitButton">適用</button>
+    <button id="clearButton">クリア</button>
+    <button id="loadButton">チーム名呼び出し</button>
+    <hr>
+    <input type="checkbox" id="blindness"><label>色覚サポート</label>
+    <input type="checkbox" id="resultCheck"><label>勝敗自動連係</label>
+
+
+    </div>
+
+</div>
+
+</body>
+<script>
+    
+    const titleform = document.getElementById("titleform");
+    const titleRep = nodecg.Replicant("title", {defaultValue: ""});
+
+    const player1 = document.getElementById("player1");
+    const player2 = document.getElementById("player2");
+
+    const p1Rep = nodecg.Replicant("p1name", {defaultValue: ""});
+    const p2Rep = nodecg.Replicant("p2name", {defaultValue: ""});
+
+    const submitButton = document.getElementById("submitButton");
+    const clearButton = document.getElementById("clearButton");
+
+    const p1incEl = document.getElementById('p1inc')
+    const p1decEl = document.getElementById('p1dec')
+
+    const p1countView = document.getElementById('p1count')
+    const p1countReplicant = nodecg.Replicant('count1', {defaultValue: 0})
+
+    const p2incEl = document.getElementById('p2inc')
+    const p2decEl = document.getElementById('p2dec')
+
+    const p2countView = document.getElementById('p2count')
+    const p2countReplicant = nodecg.Replicant('count2', {defaultValue: 0})
+
+    const redTeam = nodecg.Replicant("redTeam");
+    const whiteTeam = nodecg.Replicant("whiteTeam");
+
+    const loadButton = document.getElementById("loadButton");
+
+    const alphaTeam = nodecg.Replicant("alphaTeam");
+    const bravoTeam = nodecg.Replicant("bravoTeam");
+    
+    const blindness = document.getElementById("blindness");
+    const blindnessRep = nodecg.Replicant("blindness");
+    
+    const resultCheck = document.getElementById("resultCheck");
+    const resultCheckRep = nodecg.Replicant("resultCheck");
+    var resultRep = nodecg.Replicant("result", {defaultValue: ""});
+
+    alphaTeam.on('change', (newValue, oldValue) => {});
+    bravoTeam.on('change', (newValue, oldValue) => {});
+
+    NodeCG.waitForReplicants(titleRep,p1Rep,p2Rep,p1countReplicant,p2countReplicant,blindnessRep,resultCheckRep,resultRep).then(() => {
+    
+        nodecg.readReplicant('title', value => {
+            titleform.value = value;
+        });
+
+        nodecg.readReplicant('p1name', value => {
+            player1.value = value;
+        });
+
+        nodecg.readReplicant('p2name', value => {
+            player2.value = value;
+        });
+
+        nodecg.readReplicant('count1', value => {
+            p1countView.value = value;
+        });
+
+        nodecg.readReplicant('count2', value => {
+            p2countView.value = value;
+        });
+
+        nodecg.readReplicant('blindness', value => {
+            blindness.checked = value;
+        });
+
+        nodecg.readReplicant('resultCheck', value => {
+            resultCheck.checked = value;
+            resultAlignment(value);
+        });
+
+    });
+
+    resultCheckRep.on('change', (newValue, oldValue) => {
+        resultAlignment(newValue);
+    });
+
+    resultRep.on('change', (newValue, oldValue) => {
+        resultAlignment(newValue);
+    });
+
+    p1incEl.addEventListener('click', () => {
+        if (!resultCheckRep.value) p1countView.value = p1countReplicant.value += 1
+    })
+
+    p1decEl.addEventListener('click', () => {
+        if(p1countReplicant.value > 0){ 
+            if (!resultCheckRep.value) p1countView.value = p1countReplicant.value -= 1
+        }
+    })
+
+    p2incEl.addEventListener('click', () => {
+        if (!resultCheckRep.value) p2countView.value = p2countReplicant.value += 1
+    })
+
+    p2decEl.addEventListener('click', () => {
+        if(p2countReplicant.value > 0){ 
+            if (!resultCheckRep.value) p2countView.value = p2countReplicant.value -= 1
+        }
+    })
+
+    blindness.addEventListener('change', function() {
+        blindnessRep.value = false;
+        if(blindness.value){
+            blindnessRep.value = blindness.value;
+        }
+    })
+
+    resultCheck.addEventListener('change', function() {
+        resultCheckRep.value = false;
+        if(resultCheck.value){
+            resultCheckRep.value = resultCheck.value;
+        }
+    })
+
+    submitButton.onclick = () => {
+        titleRep.value = titleform.value;
+        p1Rep.value = player1.value;
+        p2Rep.value = player2.value;
+    }
+
+    clearButton.onclick = () => {
+        titleRep.value = titleform.value = "";
+        p1Rep.value = player1.value = "";
+        p2Rep.value = player2.value = "";
+        p1countView.value = p1countReplicant.value = 0;
+        p2countView.value = p2countReplicant.value = 0;
+    }
+    
+    loadButton.onclick = () => {
+        player1.value = alphaTeam.value;
+        player2.value = bravoTeam.value;
+    }
+
+    function resultAlignment(checked){
+        p1countView.disabled = checked;
+        p2countView.disabled = checked;
+        
+        if (checked){
+            var result_lis = resultRep.value.split(/\n/);
+            var p1result = 0;
+            var p2result = 0;
+            for (var i = 0; i < result_lis.length; i++) {
+                if (result_lis[i] == 1){
+                    p1result += 1;
+                }
+                else if (result_lis[i] == 2){
+                    p2result += 1;
+                }
+            }
+            p1countView.value = p1result;
+            p2countView.value = p2result;
+            p1countReplicant.value = p1result;
+            p2countReplicant.value = p2result;
+        }
+        else{
+            p1countView.value = p1countReplicant.value;
+            p2countView.value = p2countReplicant.value;
+        }
+    }
+</script>
+</html>

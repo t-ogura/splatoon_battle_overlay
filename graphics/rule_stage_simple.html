@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>score_long</title>
+  <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+  <link rel="stylesheet" href="font/font.css" type="text/css" charset="utf-8" />
+  <script src="js/anime.min.js"></script>
+  <style>
+    body {
+      width: 1920;
+      height: 1080;
+      font-family: "splatfont_2";
+    }
+    .small_radius img {
+      width: 200px;  /* 横幅を200pxに */
+      border-radius: 35px; /* ちょっとだけ角丸 */
+    }
+    .big_radius img {
+      margin-top: 200px;
+      width: 800px;  /* 横幅を200pxに */
+      border-radius: 140px; /* ちょっとだけ角丸 */
+    }
+    .container {
+      margin: 0px;
+      padding: 0px;
+      display: flex;
+      justify-content: center;
+      font-family: "splatfont_2";
+    }
+
+    #scoreboard {
+      margin: 0px;
+      padding: 0px;
+      display: flex;
+      height: 1080px;
+      justify-content: center;
+      width: 1920px;
+      background-image: url('img/main_frame.png');
+      font-family: "splatfont_2";
+    }
+
+    .namebar {
+      width: 1920px;
+      height: 1080px;
+      margin-top: 0px;
+      font-family: "splatfont_2";
+      font-size: 22px;
+      font-weight: bolder;
+      color: #fff;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+    }
+
+    #time {
+      width: 1920px;
+      height: 1080px;
+      margin-top: 1010px;
+      margin-left: 55px;
+      text-align: center;
+      font-size: 40px;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      color: #fff;
+      font-family: 'splatfont_2';
+    }
+
+    #score_one {
+      width: 80px;
+      height: 80px;
+      margin-top: -42px;
+      margin-left: 12px;
+      color: #fff;
+      font-size: 80px;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      text-align: center;
+      font-family: 'splatfont';
+    }
+
+    #score_two {
+      width: 80px;
+      height: 80px;
+      margin-top: -42px;
+      margin-right: 12px;
+      color: #fff;
+      font-size: 80px;
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
+      text-align: center;
+      font-family: 'splatfont';
+    }
+
+    #stage_name {
+      text-align: right;
+      padding-right: 140px;
+      height: 80px;
+      display: flex;
+      font-size: 50px;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      align-items: center;
+      justify-content: center;
+      font-family: "splatfont_2";
+    }
+
+    #player_two {
+      margin-left: 140px;
+      height: 80px;
+      display: flex;
+      font-size: 50px;
+      text-shadow: 
+        3px 3px 0px rgba(0, 0, 0, .3),
+        3px -3px 0px rgba(0, 0, 0, .3),
+        -3px 3px 0px rgba(0, 0, 0, .3),
+        -3px -3px 0px rgba(0, 0, 0, .3),
+        3px 0px 0px rgba(0, 0, 0, .3),
+        -3px 0px 0px rgba(0, 0, 0, .3),
+        0px 3px 0px rgba(0, 0, 0, .3),
+        0px -3px 0px rgba(0, 0, 0, .3)
+        ;
+      align-items: center;
+      justify-content: center;
+      font-family: "splatfont_2";
+    }
+  </style>
+
+</head>
+
+<body class="container">
+  <link rel="stylesheet" href="stylesheet.css" type="text/css" charset="utf-8" />
+  <div id="simple_stage" class="big_radius">
+    <img src="img/stage/ajifurai.jpg">
+  </div>
+  <!-- <div id="scoreboard">
+    <div id="score_one"></div>
+    <div class="namebar">
+      <div id="player_one"></div>
+    </div>
+    <div id="time"></div>
+    <div class="namebar">
+      <div id="player_two"></div>
+    </div>
+    <div id="score_two"></div>
+    <div>
+    </div>
+  </div> -->
+</body>
+
+<script>
+
+  const time = document.getElementById("time");
+  const titleView = nodecg.Replicant("title");
+  titleView.on("change", newValue => {
+    time.innerText = newValue;
+  });
+
+  const player_one = document.getElementById("player_one");
+  const p1nameView = nodecg.Replicant("p1name");
+  p1nameView.on("change", newValue => {
+    player_one.innerText = newValue;
+  });
+
+  const player_two = document.getElementById("player_two");
+  const p2nameView = nodecg.Replicant("p2name");
+  p2nameView.on("change", newValue => {
+    player_two.innerText = newValue;
+  });
+
+  const score_one = document.getElementById('score_one')
+  const count1View = nodecg.Replicant('count1', { defaultValue: 0 })
+  count1View.on('change', newValue => {
+    score_one.innerText = newValue
+  })
+
+  const score_two = document.getElementById('score_two')
+  const count2View = nodecg.Replicant('count2', { defaultValue: 0 })
+  count2View.on('change', newValue => {
+    score_two.innerText = newValue
+  })
+
+</script>
+
+</html>

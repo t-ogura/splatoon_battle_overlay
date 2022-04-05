@@ -1,0 +1,44 @@
+{
+    "name": "splatoon_battle_overlay",
+    "version": "0.1.0",
+    "description": "",
+    "main": "index.js",
+    "author": "",
+    "license": "MIT",
+  
+    "nodecg": {
+        "compatibleRange": "^1.0.0",
+        "dashboardPanels": [
+          {
+            "width": "4",
+            "name": "main_board",
+            "title": "メインボード",
+            "file": "main_board.html"
+          },
+          {
+            "width": "3",
+            "name": "team_list",
+            "title": "チームリスト",
+            "file": "team_list.html"
+          },
+          {
+            "width": "4",
+            "name": "rule_stage",
+            "title": "ルール＆ステージ",
+            "file": "rule_stage.html"
+          }
+        ],
+        "graphics": [
+          {
+            "file": "main_frame.html",
+            "width": 1920,
+            "height": 1080
+          },
+          {
+            "file": "with_battle_info.html",
+            "width": 1920,
+            "height": 1080
+          }
+        ]
+      }
+    }

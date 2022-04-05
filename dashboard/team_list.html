@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * {
+            font-size: 20px;
+      }
+    .content {
+        margin-bottom: 10px
+    }
+    .small {
+        font-size: 13px;
+    }
+    </style>
+</head>
+<body>
+    
+    <div class="content">
+        <label>アルファチーム</label>
+        <input id="alphaTeam" size="30" type="text" disabled>
+    </div>
+    <div class="content">
+        <label>ブラボーチーム</label>
+        <input id="bravoTeam" size="30" type="text" disabled>
+    </div>
+    <hr>
+
+    <label>チームリスト</label><br>
+    <select id="listbox" size="5" cols="30">
+    </select>
+    <!-- <input type="text" id="out" size="10"> -->
+    <br>
+    <button id="alphaeButton">アルファ</button>
+    <button id="bravoButton">ブラボー</button>
+    <button id="deleteButton">削除</button>
+    <hr>
+    
+    <div class="small">
+        ※チーム名を改行で区切ることで一度に複数登録できます
+    </div>
+    <textarea id="addList" rows="4" cols="30"></textarea>
+    <br>
+    <button id="addButton">チーム名追加</button>
+    <hr>
+</body>
+<script type="text/javascript">
+
+    var select = document.getElementById( 'listbox' );
+    var selectRep = nodecg.Replicant("listbox", {defaultValue: ""});
+    
+    var select = document.getElementById( 'listbox' );
+    var out = document.getElementById( 'out' );
+
+    var alphaeButton = document.getElementById('alphaeButton');
+    var bravoButton = document.getElementById('bravoButton');
+    var addButton = document.getElementById('addButton');
+    var deleteButton = document.getElementById('deleteButton');
+    var addList = document.getElementById('addList');
+
+    var alphaTeam = document.getElementById('alphaTeam');
+    var bravoTeam = document.getElementById('bravoTeam');
+    var alphaRep = nodecg.Replicant("alphaTeam", {defaultValue: ""});
+    var bravoRep = nodecg.Replicant("bravoTeam", {defaultValue: ""});
+
+
+    NodeCG.waitForReplicants(selectRep, alphaRep, bravoRep).then(() => {
+        nodecg.readReplicant('listbox', value => {
+            var lis = value.split(/\n/);
+            for (var i = 0; i < lis.length; i++) {
+                if (lis[i] != '') {
+                    let op = document.createElement("option");
+                    op.value = select.length;  //value値
+                    op.text = lis[i];   //テキスト値
+                    select.appendChild(op);
+                }
+            }
+        });
+        
+        nodecg.readReplicant('alphaTeam', value => {
+            alphaTeam.value = value;
+        });
+
+        nodecg.readReplicant('bravoTeam', value => {
+            bravoTeam.value = value;
+        });
+    })
+
+    addButton.addEventListener('click', function () {
+        var lis = addList.value.split(/\n/);
+        for (var i = 0; i < lis.length; i++) {
+            if (lis[i] != '') {
+                let op = document.createElement("option");
+                op.value = select.length;  //value値
+                op.text = lis[i];   //テキスト値
+                select.appendChild(op);
+            }
+        }
+        var text = ""
+        for (var i=0; i < select.length; i++){
+            var selectedItem = select.options[i];
+            text = text + selectedItem.text + "\n";
+        }
+        selectRep.value = text;
+    })
+    deleteButton.addEventListener('click', function () {
+        select.remove(select.selectedIndex)
+        var text = ""
+        for (var i=0; i < select.length; i++){
+            var selectedItem = select.options[i];
+            text = text + selectedItem.text + "\n";
+        }
+        selectRep.value = text;
+    })
+    alphaeButton.addEventListener('click', function () {
+        var selectedItem = select.options[ select.selectedIndex ];
+        alphaTeam.value = selectedItem.text
+        alphaRep.value = selectedItem.text
+    })
+    bravoButton.addEventListener('click', function () {
+        var selectedItem = select.options[ select.selectedIndex ];
+        bravoTeam.value = selectedItem.text
+        bravoRep.value = selectedItem.text
+    })
+  </script>
