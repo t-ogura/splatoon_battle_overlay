@@ -150,6 +150,20 @@
 
 <script>
 
+  function resizeText(textElem) {
+    textElem.style.fontSize = "50px";
+    // textElem.setAttribute("style", `font-size: 50px`);
+    var logtext = "";
+    for (
+      let size = 50;
+      textElem.offsetWidth > 400 && size > 10;
+      size -= 1
+    ) {
+      textElem.style.fontSize = size + "px";
+      // textElem.setAttribute("style", `font-size: ${size}px`); // こちらも可能
+    }
+  }
+
   const time = document.getElementById("time");
   const titleView = nodecg.Replicant("title");
   titleView.on("change", newValue => {
@@ -160,12 +174,14 @@
   const p1nameView = nodecg.Replicant("p1name");
   p1nameView.on("change", newValue => {
     player_one.innerText = newValue;
+    resizeText(player_one);
   });
 
   const player_two = document.getElementById("player_two");
   const p2nameView = nodecg.Replicant("p2name");
   p2nameView.on("change", newValue => {
     player_two.innerText = newValue;
+    resizeText(player_two);
   });
 
   const score_one = document.getElementById('score_one')
@@ -190,6 +206,22 @@
       scoreboard.style.backgroundImage = "url('img/main_frame.png')"
     }
   })
+
+  NodeCG.waitForReplicants(p1nameView, p2nameView).then(() => {
+    player_one.innerText = p1nameView.value;
+    player_two.innerText = p2nameView.value;
+    resizeText(player_one);
+    resizeText(player_two);
+  });
+
+  if (window.performance) {
+    if (window.performance.navigation.type === 1) {
+    player_one.innerText = p1nameView.value;
+    player_two.innerText = p2nameView.value;
+    resizeText(player_one);
+    resizeText(player_two);
+  }
+}
 
 </script>
 
