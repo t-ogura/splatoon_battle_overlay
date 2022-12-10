@@ -96,7 +96,7 @@
     }
 
     #time {
-      width: 1920px;
+      /* width: 1920px; */
       height: 1080px;
       text-align: center;
       margin-top: -10px;
@@ -104,6 +104,8 @@
       font-size: 60px;
       text-shadow: 3px 3px 3px rgba(0, 0, 0, .6);
       color: #fff;
+      align-items: center;
+      justify-content: center;
       position: absolute;
       top: 0px;
     }
@@ -235,22 +237,40 @@
 
 <script>
 
+  function resizeText(textElem, initSize, offsetWidth) {
+    textElem.style.fontSize = initSize + "px";
+    // textElem.setAttribute("style", `font-size: 50px`);
+    for (
+      let size = initSize;
+      textElem.offsetWidth > offsetWidth && size > 10;
+      size -= 1
+    ) {
+      textElem.style.fontSize = size + "px";
+      // textElem.setAttribute("style", `font-size: ${size}px`); // こちらも可能
+    }
+    // alert(textElem)
+    // alert(textElem.offsetWidth + ", " +  textElem.style.fontSize)
+  }
+
   const time = document.getElementById("time");
   const titleView = nodecg.Replicant("title");
   titleView.on("change", newValue => {
     time.innerText = newValue;
+    resizeText(time, 60, 400);
   });
 
   const player_one = document.getElementById("player_one");
   const p1nameView = nodecg.Replicant("p1name");
   p1nameView.on("change", newValue => {
     player_one.innerText = newValue;
+    resizeText(player_one, 60, 470);
   });
 
   const player_two = document.getElementById("player_two");
   const p2nameView = nodecg.Replicant("p2name");
   p2nameView.on("change", newValue => {
     player_two.innerText = newValue;
+    resizeText(player_two, 60, 470);
   });
 
   const score_one = document.getElementById('score_one')
@@ -284,9 +304,34 @@
     }
   });
 
+  NodeCG.waitForReplicants(p1nameView, p2nameView).then(() => {
+    player_one.innerText = p1nameView.value;
+    player_two.innerText = p2nameView.value;
+    resizeText(player_one, 60, 470);
+    resizeText(player_two, 60, 470);
+  });
+
+
+  NodeCG.waitForReplicants(titleView).then(() => {
+    time.innerText = titleView.value;
+    resizeText(time, 60, 400);
+  });
+
+  if (window.performance) {
+    if (window.performance.navigation.type == 1) {
+      player_one.innerText = p1nameView.value;
+      player_two.innerText = p2nameView.value;
+      resizeText(player_one, 60, 470);
+      resizeText(player_two, 60, 470);
+      time.innerText = titleView.value;
+      resizeText(time, 60, 400);
+    }
+  }
+
   blindnessRep.on('change', newValue => {
     changeColor(newValue);
   })
+
   ruleStageRep.on('change', (newValue, oldValue) => {
     deleteBattleInfo();
     var rule_stage_lis = newValue.split(/\n/);

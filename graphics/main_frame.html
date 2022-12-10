@@ -152,15 +152,12 @@
 
   function resizeText(textElem) {
     textElem.style.fontSize = "50px";
-    // textElem.setAttribute("style", `font-size: 50px`);
-    var logtext = "";
     for (
       let size = 50;
       textElem.offsetWidth > 400 && size > 10;
       size -= 1
     ) {
       textElem.style.fontSize = size + "px";
-      // textElem.setAttribute("style", `font-size: ${size}px`); // こちらも可能
     }
   }
 
@@ -215,7 +212,7 @@
   });
 
   if (window.performance) {
-    if (window.performance.navigation.type === 1) {
+    if (window.performance.navigation.type == 1) {
     player_one.innerText = p1nameView.value;
     player_two.innerText = p2nameView.value;
     resizeText(player_one);

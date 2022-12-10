@@ -18,15 +18,15 @@
 </head>
 <body>
     
-    <!-- <div>
-        <label>ステージ</label>
-        <input id="stage" size="20" type="text" disabled>
+    <div class="content">
+        <label id="titlename_label">ゲームタイトル: </label>
+        <select id="titlename">
+            <option value="3">スプラトゥーン3</option>
+            <option value="2">スプラトゥーン2</option>
+        </select>
     </div>
-    <div>
-        <label>ルール　</label>
-        <input id="rule" size="10" type="text" disabled>
-    </div>
-    <hr> -->
+
+    <hr>
 
     <div class="small">
         ※ステージとルールを選択した状態で『試合追加』を押すと、試合情報が追加されます<br>
@@ -35,7 +35,7 @@
     <!-- <div class="flex"> -->
     <!-- <label>ステージ一覧</label><br> -->
     <select id="stagelist" size="5">
-        <option value="バッテラストリート">バッテラストリート</option>
+        <!-- <option value="バッテラストリート">バッテラストリート</option>
         <option value="フジツボスポーツクラブ">フジツボスポーツクラブ</option>
         <option value="ガンガゼ野外音楽堂">ガンガゼ野外音楽堂</option>
         <option value="コンブトラック">コンブトラック</option>
@@ -57,7 +57,7 @@
         <option value="スメーシーワールド">スメーシーワールド</option>
         <option value="ホテルニューオートロ">ホテルニューオートロ</option>
         <option value="アンチョビットゲームズ">アンチョビットゲームズ</option>
-        <option value="ムツゴ楼">ムツゴ楼</option>
+        <option value="ムツゴ楼">ムツゴ楼</option> -->
 
     </select>
     <!-- </div> -->
@@ -71,20 +71,14 @@
         <option value="ガチホコバトル">ガチホコバトル</option>
         <option value="ガチアサリ">ガチアサリ</option>
     </select>
-    <!-- </div> -->
-    <!-- <input type="text" id="out" size="10"> -->
     <br>
     <button id="addBattleButton">試合追加</button>
-    <!-- <button id="applyButton">ルルステ表示</button> -->
     <hr>
-
-    
     <div id="battle">
     
     </div>
     
     <button id="deleteBattleButton">試合削除</button>
-    <!-- <button id="applyBattleButton">ルルステ表示</button> -->
     <button id="replicantButton">ルルステ保存</button>
     <button id="resetButton">結果リセット</button>
 </body>
@@ -92,31 +86,66 @@
 
     var stagelist = document.getElementById( 'stagelist' );
     var rulelist = document.getElementById( 'rulelist' );
-    
-    // var stage = document.getElementById( 'stage' );
-    // var rule = document.getElementById( 'rule' );
 
     var addBattleButton = document.getElementById('addBattleButton');
-    // var applyButton = document.getElementById('applyButton');
     var deleteBattleButton = document.getElementById('deleteBattleButton');
-    // var applyBattleButton = document.getElementById('applyBattleButton');
     var replicantButton = document.getElementById('replicantButton');
     var resetButton = document.getElementById('resetButton');
 
-    // var battleStageRep = nodecg.Replicant("battleStage", {defaultValue: ""});
-    // var battleRuleRep = nodecg.Replicant("battleRule", {defaultValue: ""});
     var ruleStageRep = nodecg.Replicant("ruleStage", {defaultValue: ""});
     var resultRep = nodecg.Replicant("result", {defaultValue: ""});
 
+    var titlename = document.getElementById('titlename');
+    const gameTitleRep = nodecg.Replicant('gameTitle', { defaultValue: 3 })
 
-    // battleStageRep.on('change', (newValue, oldValue) => {});
-    // battleRuleRep.on('change', (newValue, oldValue) => {});
+    var stageArr2 = [
+        "Bバスパーク",
+        "アジフライスタジアム",
+        "アロワナモール",
+        "アンチョビットゲームズ",
+        "エンガワ河川敷",
+        "ガンガゼ野外音楽堂",
+        "ザトウマーケット",
+        "ショッツル鉱山",
+        "スメーシーワールド",
+        "タチウオパーキング",
+        "チョウザメ造船",
+        "デボン海洋博物館",
+        "ハコフグ倉庫",
+        "バッテラストリート",
+        "フジツボスポーツクラブ",
+        "ホッケふ頭",
+        "ホテルニューオートロ",
+        "マンタマリア号",
+        "ムツゴ楼",
+        "モズク農園",
+        "モンガラキャンプ場",
+        "海女美術大学"
+    ];
+
+    var stageArr3 = [
+        "ユノハナ大渓谷",
+        "ゴンズイ地区",
+        "ヤガラ市場",
+        "マテガイ放水路",
+        "ナメロウ金属",
+        "マサバ海峡大橋",
+        "キンメダイ美術館",
+        "マヒマヒリゾート＆スパ",
+        "海女美術大学",
+        "チョウザメ造船",
+        "ザトウマーケット",
+        "スメーシーワールド",
+        "クサヤ温泉",
+        "ヒラメが丘団地"
+    ];
+
     ruleStageRep.on('change', (newValue, oldValue) => {});
     resultRep.on('change', (newValue, oldValue) => {});
+    gameTitleRep.on('change', (newValue, oldValue) => {});
 
-    NodeCG.waitForReplicants(ruleStageRep, resultRep).then(() => {
+    NodeCG.waitForReplicants(ruleStageRep, resultRep, gameTitleRep).then(() => {
         var rule_stage_lis = ruleStageRep.value.split(/\n/);
-        // var rule_lis = battleRuleRep.value.split(/\n/);
         var result_lis = resultRep.value.split(/\n/);
         for (var i = 0; i < rule_stage_lis.length; i++) {
             if (rule_stage_lis[i] != ''){
@@ -125,18 +154,47 @@
                 addBattleInfo(stage, rule, result_lis[i]);
             }
         }
+        if (gameTitleRep.value == 2){
+            titlename.selectedIndex = 1;
+            setStageList(stageArr2);
+        }
+        else{
+            titlename.selectedIndex = 0;
+            setStageList(stageArr3);
+        }
     });
+
+    function setStageList(stageArr){
+        if (stagelist.hasChildNodes()) {
+            while (stagelist.childNodes.length > 0) {
+                stagelist.removeChild(stagelist.firstChild)
+            }
+        }
+        stageArr.forEach(st => {
+            var option = document.createElement("option");
+            option.text = st;
+            option.value = st;
+            stagelist.appendChild(option);
+        });
+    }
+
+    titlename.addEventListener('change', function(){
+        const selected_num = titlename.selectedIndex;
+        const selected_title_ver = titlename.options[selected_num].value;
+        if (selected_title_ver == "2"){
+            setStageList(stageArr2);
+            gameTitleRep.value = 2;
+        }
+        else{
+            setStageList(stageArr3);
+            gameTitleRep.value = 3;
+        }
+    })
+
 
     replicantButton.onclick = () => {
         saveRep();
     }
-
-    // applyButton.onclick = () => {
-    //     var selectedStage = stagelist.options[ stagelist.selectedIndex ];
-    //     stage.value = selectedStage.text;
-    //     var selectedRule = rulelist.options[ rulelist.selectedIndex ];
-    //     rule.value = selectedRule.text;
-    // }
 
     var index = 0;
     addBattleButton.addEventListener('click', function(){
@@ -144,27 +202,6 @@
         var selectedRule = rulelist.options[ rulelist.selectedIndex ];
         addBattleInfo(selectedStage.text, selectedRule.text, 0);
     });
-
-    // applyBattleButton.onclick = () => {
-        
-    //     var boxes = document.getElementsByClassName('status_check');
-    //     // チェックボックスの個数を取得する
-    //     var cnt = boxes.length;
-    //     var selectedIndex = -1;
-
-    //     for (var k = 0; k < cnt; k++) {
-    //         if (boxes.item(k).checked){
-    //             selectedIndex = k + 1;
-    //         }
-    //     }
-    //     if (selectedIndex > 0){
-    //         var selectedStage = document.getElementById("battleStage"+selectedIndex);
-    //         stage.value = selectedStage.value;
-    //         var selectedRule = document.getElementById("battleRule"+selectedIndex);
-    //         rule.value = selectedRule.value;
-    //     }
-    // }
-    
 
     deleteBattleButton.onclick = () => {
         
